@@ -5,6 +5,7 @@
 import axios from "axios";
 import pinyin from "pinyin";
 import { Base64 } from "js-base64";
+import qs from "querystring";
 // 获取签名方法
 import getSecuritySign from "./sign";
 
@@ -337,11 +338,14 @@ function registerSingerDetail(app) {
   app.use("/api/getSingerDetail", (req, res) => {
     const url = "https://u.y.qq.com/cgi-bin/musics.fcg";
 
+    const queryString = req.url.split("?")[1];
+    const query = qs.parse(queryString);
+
     const data = JSON.stringify({
       comm: { ct: 24, cv: 0 },
       singerSongList: {
         method: "GetSingerSongList",
-        param: { order: 1, singerMid: req.query.mid, begin: 0, num: 100 },
+        param: { order: 1, singerMid: query.mid, begin: 0, num: 100 },
         module: "musichall.song_list_server",
       },
     });
@@ -361,7 +365,7 @@ function registerSingerDetail(app) {
         const songList = handleSongList(list);
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               songs: songList,
@@ -446,7 +450,7 @@ function registerSongsUrl(app) {
     return Promise.all(requests).then(() => {
       // 所有请求响应完毕，urlMap 也就构造完毕了
       res.end(
-        JSON.stringtify({
+        JSON.stringify({
           code: ERR_OK,
           result: {
             map: urlMap,
@@ -471,7 +475,7 @@ function registerLyric(app) {
       const data = response.data;
       if (data.code === ERR_OK) {
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               lyric: Base64.decode(data.lyric),
@@ -518,7 +522,7 @@ function registerAlbum(app) {
         const songList = handleSongList(list);
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               songs: songList,
@@ -578,7 +582,7 @@ function registerTopList(app) {
         });
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               topList,
@@ -629,7 +633,7 @@ function registerTopDetail(app) {
         const songList = handleSongList(list);
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               songs: songList,
@@ -654,7 +658,7 @@ function registerHotKeys(app) {
       const data = response.data;
       if (data.code === ERR_OK) {
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               hotKeys: data.data.hotkey
@@ -747,7 +751,7 @@ function registerSearch(app) {
         const hasMore = 20 * (curpage - 1) + curnum < totalnum;
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               songs: songList,
