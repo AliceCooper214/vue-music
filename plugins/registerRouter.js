@@ -304,7 +304,7 @@ function registerSingerList(app) {
         });
 
         res.end(
-          JSON.stringtify({
+          JSON.stringify({
             code: ERR_OK,
             result: {
               singers: hot.concat(letter),
