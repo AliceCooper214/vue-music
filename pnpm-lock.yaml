@@ -20,9 +20,18 @@ dependencies:
   axios:
     specifier: ^0.27.2
     version: 0.27.2
+  create-keyframe-animation:
+    specifier: ^0.1.0
+    version: 0.1.0
   good-storage:
     specifier: ^1.1.1
     version: 1.1.1
+  lyric-parser:
+    specifier: ^1.0.1
+    version: 1.0.1
+  throttle-debounce:
+    specifier: ^5.0.0
+    version: 5.0.0
   vue:
     specifier: ^3.3.4
     version: 3.3.4
@@ -949,6 +958,16 @@ packages:
     dev: true
     optional: true
 
+  /create-keyframe-animation@0.1.0:
+    resolution: {integrity: sha1-Brjz4I7PtT+Afu2RBD5cocQNWYc=}
+    dependencies:
+      load-styles: 2.0.0
+      lodash.defaults: 3.1.2
+      native-promisify-if-present: 1.0.1
+      prefixed-event: 1.0.4
+      transform-property: 0.0.1
+    dev: false
+
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
     engines: {node: '>= 8'}
@@ -1453,6 +1472,10 @@ packages:
     dev: true
     optional: true
 
+  /is-function@1.0.2:
+    resolution: {integrity: sha512-lw7DUp0aWXYg+CBCN+JKkcE0Q2RayZnSvnZBlwgxHBQhqt5pZNVy4Ri7H9GmmXkdu7LUthszM+Tor1u/2iBcpQ==}
+    dev: false
+
   /is-glob@4.0.3:
     resolution: {integrity: sha512-xelSayHH36ZgE7ZWhli7pW34hNbNl8Ojv5KVmkJD4hBdD3th8Tfk9vYasLM+mXWOZhFkgZfxhLSnrwRr4elSSg==}
     engines: {node: '>=0.10.0'}
@@ -1530,6 +1553,10 @@ packages:
     dev: true
     optional: true
 
+  /load-styles@2.0.0:
+    resolution: {integrity: sha1-oJAcj4DvDIaUVOtYC078LwvkhHE=}
+    dev: false
+
   /locate-path@6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
@@ -1537,9 +1564,75 @@ packages:
       p-locate: 5.0.0
     dev: true
 
+  /lodash._baseassign@3.2.0:
+    resolution: {integrity: sha1-jDigmVAPIVrQnlnxci/QxSv+Ck4=}
+    dependencies:
+      lodash._basecopy: 3.0.1
+      lodash.keys: 3.1.2
+    dev: false
+
+  /lodash._basecopy@3.0.1:
+    resolution: {integrity: sha1-jaDmqHbPNEwK2KVIghEd08XHyjY=}
+    dev: false
+
+  /lodash._bindcallback@3.0.1:
+    resolution: {integrity: sha1-5THCdkTPi1epnhftlbNcdIeJOS4=}
+    dev: false
+
+  /lodash._createassigner@3.1.1:
+    resolution: {integrity: sha1-g4pbri/aymOsIt7o4Z+k5taXCxE=}
+    dependencies:
+      lodash._bindcallback: 3.0.1
+      lodash._isiterateecall: 3.0.9
+      lodash.restparam: 3.6.1
+    dev: false
+
+  /lodash._getnative@3.9.1:
+    resolution: {integrity: sha1-VwvH3t5G1hzc3mh9ZdPuy6o6r/U=}
+    dev: false
+
+  /lodash._isiterateecall@3.0.9:
+    resolution: {integrity: sha1-UgOte6Ql+uhCRg5pbbnPPmqsBXw=}
+    dev: false
+
+  /lodash.assign@3.2.0:
+    resolution: {integrity: sha1-POnwI0tLIiPilrj6CsH+6OvKZPo=}
+    dependencies:
+      lodash._baseassign: 3.2.0
+      lodash._createassigner: 3.1.1
+      lodash.keys: 3.1.2
+    dev: false
+
+  /lodash.defaults@3.1.2:
+    resolution: {integrity: sha1-xzCLGNv4vJNy1wGnNJPGEZK9Liw=}
+    dependencies:
+      lodash.assign: 3.2.0
+      lodash.restparam: 3.6.1
+    dev: false
+
+  /lodash.isarguments@3.1.0:
+    resolution: {integrity: sha1-L1c9hcaiQon/AGY7SRwdM4/zRYo=}
+    dev: false
+
+  /lodash.isarray@3.0.4:
+    resolution: {integrity: sha1-eeTriMNqgSKvhvhEqpvNhRtfu1U=}
+    dev: false
+
+  /lodash.keys@3.1.2:
+    resolution: {integrity: sha1-TbwEcrFWvlCgsoaFXRvQsMZWCYo=}
+    dependencies:
+      lodash._getnative: 3.9.1
+      lodash.isarguments: 3.1.0
+      lodash.isarray: 3.0.4
+    dev: false
+
   /lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
+
+  /lodash.restparam@3.6.1:
+    resolution: {integrity: sha1-k2pOMJ7zMKdkXtQUWYbIWuWyCAU=}
+    dev: false
 
   /lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -1551,6 +1644,10 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /lyric-parser@1.0.1:
+    resolution: {integrity: sha1-ofiqd2U8+Ufs+U31HV+Bavye1Ew=}
+    dev: false
 
   /magic-string@0.30.3:
     resolution: {integrity: sha512-B7xGbll2fG/VjP+SWg4sX3JynwIU0mjoTc6MPpKNuIvftk6u6vqhDnk1R80b8C2GBR6ywqy+1DcKBrevBg+bmw==}
@@ -1622,6 +1719,12 @@ packages:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  /native-promisify-if-present@1.0.1:
+    resolution: {integrity: sha1-eMebDcOcWpSzrQ9Gd9ZLcXD0guI=}
+    dependencies:
+      is-function: 1.0.2
+    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=}
@@ -1807,6 +1910,10 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /prefixed-event@1.0.4:
+    resolution: {integrity: sha1-I+klzfsQmq6qQeyR04yRxREEKqc=}
+    dev: false
 
   /prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -2041,6 +2148,11 @@ packages:
     resolution: {integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=}
     dev: true
 
+  /throttle-debounce@5.0.0:
+    resolution: {integrity: sha512-2iQTSgkkc1Zyk0MeVrt/3BvuOXYPl/R8Z0U2xxo9rjwNciaHDG3R+Lm6dh4EeUci49DanvBnuqI6jshoQQRGEg==}
+    engines: {node: '>=12.22'}
+    dev: false
+
   /to-fast-properties@2.0.0:
     resolution: {integrity: sha1-3F5pjL0HkmW8c+A3doGk5Og/YW4=}
     engines: {node: '>=4'}
@@ -2056,6 +2168,10 @@ packages:
     resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
     dev: true
     optional: true
+
+  /transform-property@0.0.1:
+    resolution: {integrity: sha1-SGNmL51eW7jwwAZI7/CL6xT9ZfI=}
+    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
