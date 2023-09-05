@@ -1,11 +1,9 @@
 <template>
-  <div>
-    album
-  </div>
+  <div>album</div>
 </template>
 
 <script>
 export default {
-  name: 'album'
+  name: 'album',
 }
 </script>

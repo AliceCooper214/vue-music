@@ -13,12 +13,12 @@ export default {
   props: {
     click: {
       type: Boolean,
-      default: true
+      default: true,
     },
     probeType: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   emits: ['scroll'],
   setup(props, { emit }) {
@@ -27,8 +27,8 @@ export default {
 
     return {
       rootRef,
-      scroll
+      scroll,
     }
-  }
+  },
 }
 </script>

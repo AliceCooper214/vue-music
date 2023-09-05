@@ -1,12 +1,12 @@
 <script>
-import MHeader from "@/components/header/header";
-import Tab from "@/components/tab/tab";
+import MHeader from '@/components/header/header'
+import Tab from '@/components/tab/tab'
 
 export default {
   components: {
     MHeader,
-    Tab
-  }
+    Tab,
+  },
 }
 </script>
 

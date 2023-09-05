@@ -1,16 +1,16 @@
-import { fileURLToPath, URL } from "node:url";
+import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import apiPlugin from "./plugins/registerRouter";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import apiPlugin from './plugins/registerRouter'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), apiPlugin()],
   resolve: {
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   css: {
@@ -23,4 +23,4 @@ export default defineConfig({
       },
     },
   },
-});
+})

@@ -14,11 +14,20 @@
     <div class="fixed" v-show="fixedTitle" :style="fixedStyle">
       <div class="fixed-title">{{ fixedTitle }}</div>
     </div>
-    <div class="shortcut" @touchstart.stop.prevent="onShortcutTouchStart" @touchmove.stop.prevent="onShortcutTouchMove"
-      @touchend.stop.prevent>
+    <div
+      class="shortcut"
+      @touchstart.stop.prevent="onShortcutTouchStart"
+      @touchmove.stop.prevent="onShortcutTouchMove"
+      @touchend.stop.prevent
+    >
       <ul>
-        <li v-for="(item, index) in shortcutList" :key="item" :data-index="index" class="item"
-          :class="{ 'current': currentIndex === index }">
+        <li
+          v-for="(item, index) in shortcutList"
+          :key="item"
+          :data-index="index"
+          class="item"
+          :class="{ current: currentIndex === index }"
+        >
           {{ item }}
         </li>
       </ul>
@@ -27,38 +36,36 @@
 </template>
 
 <script>
-import Scroll from '@/components/wrap-scroll/index';
-import useFixed from './use-fixed';
-import useShortcut from './use-shortcut';
+import Scroll from '@/components/wrap-scroll/index'
+import useFixed from './use-fixed'
+import useShortcut from './use-shortcut'
 
 export default {
   name: 'index-list',
   components: {
-    Scroll
+    Scroll,
   },
   props: {
     data: {
       type: Array,
       default() {
         return []
-      }
+      },
     },
     shortcutList: {
       type: Array,
       default() {
         return []
-      }
-    }
+      },
+    },
   },
+  emits: ['select'],
   setup(props, { emit }) {
-    const {
-      groupRef,
-      onScroll,
-      fixedTitle,
-      fixedStyle,
-      currentIndex
-    } = useFixed(props)
-    const { shortcutList, scrollRef, onShortcutTouchStart, onShortcutTouchMove } = useShortcut(props, groupRef)
+    const { groupRef, onScroll, fixedTitle, fixedStyle, currentIndex } = useFixed(props)
+    const { shortcutList, scrollRef, onShortcutTouchStart, onShortcutTouchMove } = useShortcut(
+      props,
+      groupRef
+    )
 
     function onItemClick(item) {
       emit('select', item)
@@ -74,9 +81,9 @@ export default {
       shortcutList,
       scrollRef,
       onShortcutTouchStart,
-      onShortcutTouchMove
+      onShortcutTouchMove,
     }
-  }
+  },
 }
 </script>
 
@@ -154,7 +161,7 @@ export default {
       font-size: $font-size-small;
 
       &.current {
-        color: $color-theme
+        color: $color-theme;
       }
     }
   }

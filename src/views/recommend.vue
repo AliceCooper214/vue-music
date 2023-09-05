@@ -36,12 +36,12 @@
 </template>
 
 <script>
-import { getRecommend } from "@/service/recommend";
-import Slider from "@/components/base/slider/slider";
-import Scroll from "@/components/base/scroll/scroll";
+import { getRecommend } from '@/service/recommend'
+import Slider from '@/components/base/slider/slider'
+import Scroll from '@/components/base/scroll/scroll'
 
 export default {
-  name: "recommend",
+  name: 'recommend',
   components: {
     Slider,
     Scroll,
@@ -51,31 +51,31 @@ export default {
       sliders: [],
       albums: [],
       selectedAlbum: null,
-    };
+    }
   },
   computed: {
     loading() {
-      return !this.sliders.length && !this.albums.length;
+      return !this.sliders.length && !this.albums.length
     },
   },
   async created() {
-    const result = await getRecommend();
-    this.sliders = result.sliders;
-    this.albums = result.albums;
+    const result = await getRecommend()
+    this.sliders = result.sliders
+    this.albums = result.albums
   },
   methods: {
     selectItem(album) {
-      this.selectedAlbum = album;
+      this.selectedAlbum = album
       // this.cacheAlbum(album)
       this.$router.push({
         path: `/recommend/${album.id}`,
-      });
+      })
     },
     // cacheAlbum(album) {
     //   storage.session.set(ALBUM_KEY, album)
     // }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

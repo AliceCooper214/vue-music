@@ -1,22 +1,22 @@
-import axios from "axios";
+import axios from 'axios'
 
-const ERR_OK = 0;
-const baseURL = "/";
+const ERR_OK = 0
+const baseURL = '/'
 
-axios.defaults.baseURL = baseURL;
+axios.defaults.baseURL = baseURL
 
 export function get(url, params) {
   return axios
     .get(url, {
       params,
     })
-    .then((res) => {
-      const serverData = res.data;
+    .then(res => {
+      const serverData = res.data
       if (serverData.code === ERR_OK) {
-        return serverData.result;
+        return serverData.result
       }
     })
-    .catch((e) => {
-      console.log(e);
-    });
+    .catch(e => {
+      console.log(e)
+    })
 }

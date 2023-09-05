@@ -1,17 +1,8 @@
-import {
-  h,
-  mergeProps,
-  withCtx,
-  renderSlot,
-  ref,
-  computed,
-  watch,
-  nextTick,
-} from "vue";
-import Scroll from "@/components/base/scroll/scroll";
+import { h, mergeProps, withCtx, renderSlot, ref, computed, watch, nextTick } from 'vue'
+import Scroll from '@/components/base/scroll/scroll'
 
 export default {
-  name: "wrap-scroll",
+  name: 'wrap-scroll',
   props: Scroll.props,
   props: Scroll.emits,
   render(ctx) {
@@ -19,31 +10,31 @@ export default {
       Scroll,
       mergeProps(
         {
-          ref: "scrollRef",
+          ref: 'scrollRef',
         },
         ctx.$props,
         {
-          onScroll: (e) => {
-            ctx.$emit("scroll", e);
+          onScroll: e => {
+            ctx.$emit('scroll', e)
           },
         }
       ),
       {
         default: withCtx(() => {
-          return [renderSlot(ctx.$slots, "default")];
+          return [renderSlot(ctx.$slots, 'default')]
         }),
       }
-    );
+    )
   },
   setup() {
-    const scrollRef = ref(null);
+    const scrollRef = ref(null)
     const scroll = computed(() => {
-      return scrollRef.value.scroll;
-    });
+      return scrollRef.value.scroll
+    })
 
     return {
       scrollRef,
       scroll,
-    };
+    }
   },
-};
+}
