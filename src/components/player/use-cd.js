@@ -8,14 +8,14 @@ export default function useCd() {
   const store = useStore()
   const playing = computed(() => store.state.playing)
 
+  const cdCls = computed(() => {
+    return playing.value ? 'playing' : ''
+  })
+
   watch(playing, newPlaying => {
     if (!newPlaying) {
       syncTransform(cdRef.value, cdImageRef.value)
     }
-  })
-
-  const cdCls = computed(() => {
-    return playing.value ? 'playing' : ''
   })
 
   function syncTransform(wrapper, inner) {
