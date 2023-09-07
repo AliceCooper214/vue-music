@@ -1,0 +1,17 @@
+{
+  "exclude": ["node_modules", "./vite.config.js", "./dist"],
+  "include": ["src/**/*"],
+  "compilerOptions": {
+    "baseUrl": "src",
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "paths": {
+      "@/assets/*": ["assets/*"],
+      "@/components/*": ["components/*"],
+      "@/router/*": ["router/*"],
+      "@/service/*": ["service/*"],
+      "@/store/*": ["store/*"],
+      "@/views/*": ["views/*"]
+    }
+  }
+}

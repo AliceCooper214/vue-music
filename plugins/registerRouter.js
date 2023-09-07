@@ -464,11 +464,13 @@ function registerSongsUrl(app) {
 function registerLyric(app) {
   app.use('/api/getLyric', (req, res) => {
     const url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+    const queryString = req.url.split('?')[1]
+    const query = qs.parse(queryString)
 
     get(url, {
       '-': 'MusicJsonCallback_lrc',
       pcachetime: +new Date(),
-      songmid: req.query.mid,
+      songmid: query.mid,
       g_tk_new_20200303: token,
     }).then(response => {
       const data = response.data
@@ -491,12 +493,15 @@ function registerLyric(app) {
 // 注册歌单专辑接口
 function registerAlbum(app) {
   app.use('/api/getAlbum', (req, res) => {
+    const queryString = req.url.split('?')[1]
+    const query = qs.parse(queryString)
+
     const data = {
       req_0: {
         module: 'srf_diss_info.DissInfoServer',
         method: 'CgiGetDiss',
         param: {
-          disstid: Number(req.query.id),
+          disstid: Number(query.id),
           onlysonglist: 1,
           song_begin: 0,
           song_num: 100,
@@ -598,8 +603,10 @@ function registerTopList(app) {
 // 注册排行榜详情接口
 function registerTopDetail(app) {
   app.use('/api/getTopDetail', (req, res) => {
+    const queryString = req.url.split('?')[1]
+    const query = qs.parse(queryString)
     const url = 'https://u.y.qq.com/cgi-bin/musics.fcg'
-    const { id, period } = req.query
+    const { id, period } = query
 
     const data = JSON.stringify({
       detail: {
@@ -682,8 +689,9 @@ function registerHotKeys(app) {
 function registerSearch(app) {
   app.use('/api/search', (req, res) => {
     const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
-
-    const { query, page, showSinger } = req.query
+    const queryString = req.url.split('?')[1]
+    const queryResult = qs.parse(queryString)
+    const { query, page, showSinger } = queryResult
 
     const data = {
       _: getRandomVal(),

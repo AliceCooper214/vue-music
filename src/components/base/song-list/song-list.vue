@@ -13,8 +13,10 @@
 </template>
 
 <script>
-export default {
-  ame: 'song-list',
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  name: 'song-list',
   props: {
     songs: {
       type: Array,
@@ -45,7 +47,7 @@ export default {
       }
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>
