@@ -36,7 +36,9 @@
 </template>
 
 <script>
+import storage from 'good-storage'
 import { getRecommend } from '@/service/recommend'
+import { ALBUM_KEY } from '@/assets/js/constant'
 import Slider from '@/components/base/slider/slider'
 import Scroll from '@/components/base/scroll/scroll'
 
@@ -66,14 +68,14 @@ export default {
   methods: {
     selectItem(album) {
       this.selectedAlbum = album
-      // this.cacheAlbum(album)
+      this.cacheAlbum(album)
       this.$router.push({
         path: `/recommend/${album.id}`,
       })
     },
-    // cacheAlbum(album) {
-    //   storage.session.set(ALBUM_KEY, album)
-    // }
+    cacheAlbum(album) {
+      storage.session.set(ALBUM_KEY, album)
+    },
   },
 }
 </script>

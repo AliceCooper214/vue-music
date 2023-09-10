@@ -1,18 +1,18 @@
 <template>
   <div class="singer" v-loading="!singers.length">
     <index-list :data="singers" @select="selectSinger"></index-list>
+    <router-view v-slot="{ Component }">
+      <transition appear name="slide">
+        <component :is="Component" :data="selectedSinger" />
+      </transition>
+    </router-view>
   </div>
-  <router-view v-slot="{ Component }">
-    <transition appear name="slide">
-      <component :is="Component" :data="selectedSinger" />
-    </transition>
-  </router-view>
 </template>
 
 <script>
+import storage from 'good-storage'
 import { getSingerList } from '@/service/singer'
 import IndexList from '@/components/index-list/index-list.vue'
-import storage from 'good-storage'
 import { SINGER_KEY } from '@/assets/js/constant'
 
 export default {

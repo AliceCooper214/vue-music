@@ -8,6 +8,7 @@ import { Base64 } from 'js-base64'
 import qs from 'querystring'
 // 获取签名方法
 import getSecuritySign from './sign'
+import sessionIdGeneratorGet from './sessionIdGeneratorGet'
 
 const ERR_OK = 0
 const token = 5381
@@ -109,6 +110,16 @@ function mergeSinger(singer) {
 
 // 注册后端路由
 function registerRouter(app) {
+  app.use(function (err, req, res, next) {
+    // 在这里处理异常
+    console.error(err) // 输出错误信息到控制台
+
+    // 可以根据需要自定义错误处理逻辑
+    res.statusCode = 500
+    res.setHeader('Content-Type', 'application/json')
+    res.end(JSON.stringify({ error: 'Internal Server Error' }))
+  })
+
   registerRecommend(app)
 
   registerSingerList(app)
@@ -688,74 +699,150 @@ function registerHotKeys(app) {
 // 注册搜索查询接口
 function registerSearch(app) {
   app.use('/api/search', (req, res) => {
-    const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+    // const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
     const queryString = req.url.split('?')[1]
     const queryResult = qs.parse(queryString)
     const { query, page, showSinger } = queryResult
 
-    const data = {
-      _: getRandomVal(),
-      g_tk_new_20200303: token,
-      w: query,
-      p: page,
-      perpage: 20,
-      n: 20,
-      zhidaqu: 1,
-      catZhida: showSinger === 'true' ? 1 : 0,
-      t: 0,
-      flag: 1,
-      ie: 'utf-8',
-      sem: 1,
-      aggr: 0,
-      remoteplace: 'txt.mqq.all',
-      uin: '0',
-      needNewCode: 1,
-      platform: 'h5',
-      format: 'json',
+    // const data = {
+    //   _: getRandomVal(),
+    //   g_tk_new_20200303: token,
+    //   w: query,
+    //   p: page,
+    //   perpage: 20,
+    //   n: 20,
+    //   zhidaqu: 1,
+    //   catZhida: showSinger === 'true' ? 1 : 0,
+    //   t: 0,
+    //   flag: 1,
+    //   ie: 'utf-8',
+    //   sem: 1,
+    //   aggr: 0,
+    //   remoteplace: 'txt.mqq.all',
+    //   uin: '0',
+    //   needNewCode: 1,
+    //   platform: 'h5',
+    //   format: 'json',
+    // }
+
+    const params = {
+      comm: {
+        // g_tk: 5381,
+        uin: getUid(),
+        format: 'json',
+        inCharset: 'utf-8',
+        outCharset: 'utf-8',
+        notice: 0,
+        // platform: 'h5',
+        platform: 'yqq.json',
+        needNewCode: 1,
+        ct: 23,
+        cv: 0,
+      },
+      req_0: {
+        method: 'DoSearchForQQMusicDesktop',
+        module: 'music.search.SearchCgiService',
+        param: {
+          remoteplace: 'txt.mqq.all',
+          // remoteplace: 'yqq.yqq.yqq',
+          searchid: sessionIdGeneratorGet(3),
+          // search_type: showSinger == 'true' ? 1 : 0,
+          search_type: 0,
+          query: query,
+          page_num: Number(page),
+          num_per_page: 20,
+        },
+      },
     }
 
-    get(url, data).then(response => {
-      const data = response.data
+    const url = `https://u.y.qq.com/cgi-bin/musicu.fcg`
+    // 签名不知道关键参数
+    // const url = `https://u.y.qq.com/cgi-bin/musicu.fcg?_=${getRandomVal()}&sign=${getSecuritySign(
+    //   JSON.stringify(params)
+    // )}`
+    // const url = `https://u.y.qq.com/cgi-bin/musicu.fcg?_=${getRandomVal()}&_webcgikey=DoSearchForQQMusicDesktop`
+
+    /**
+     * ------------------
+     * id:
+     * song: 3,
+     * album: 4,
+     * playlist: 6,
+     * user: 13,
+     * lyric: 5,
+     * mv: 7
+     * ------------------
+     * type:
+     * song: 0,
+     * album: 2,
+     * mv: 4,
+     * playlist: 3,
+     * user: 8,
+     * lyric: 7
+     */
+    post(url, params).then(response => {
+      // const data = response.data
+      const data = response.data.req_0.data
       if (data.code === ERR_OK) {
         const songList = []
-        const songData = data.data.song
+        const songData = data.body.song
         const list = songData.list
 
         list.forEach(item => {
           const info = item
-          if (info.pay.payplay !== 0 || !info.interval) {
+          // if (info.pay.payplay !== 0 || !info.interval) {
+          if (info.pay.pay_play !== 0 || !info.interval) {
             // 过滤付费歌曲
             return
           }
 
           const song = {
-            id: info.songid,
-            mid: info.songmid,
-            name: info.songname,
+            // id: info.songid,
+            id: info.id,
+            // mid: info.songmid,
+            mid: info.mid,
+            // name: info.songname,
+            name: info.name,
             singer: mergeSinger(info.singer),
             url: '',
             duration: info.interval,
-            pic: info.albummid
-              ? `https://y.gtimg.cn/music/photo_new/T002R800x800M000${info.albummid}.jpg?max_age=2592000`
+            // pic: info.albumm.id
+            pic: info.album.pmid
+              ? // ? `https://y.gtimg.cn/music/photo_new/T002R800x800M000${info.albummid}.jpg?max_age=2592000`
+                `https://y.gtimg.cn/music/photo_new/T002R800x800M000${info.album.pmid}.jpg?max_age=2592000`
               : fallbackPicUrl,
-            album: info.albumname,
+            album: info.album.name,
           }
           songList.push(song)
         })
 
         let singer
-        const zhida = data.data.zhida
-        if (zhida && zhida.type === 2) {
+        // const zhida = data.data.zhida
+        const zhida = data.body.zhida.list
+        // !!！应该是该为1了
+        // if (zhida && zhida.type === 2) {
+        if (zhida && zhida[0] && zhida[0].type === 1) {
+          const mid = zhida[0].pic
+            .slice(0, zhida[0].pic.length - 6)
+            .replace('http://y.gtimg.cn/music/photo_new/T001R150x150M000', '')
           singer = {
-            id: zhida.singerid,
-            mid: zhida.singermid,
-            name: zhida.singername,
-            pic: `https://y.gtimg.cn/music/photo_new/T001R800x800M000${zhida.singermid}.jpg?max_age=2592000`,
+            // id: zhida.singerid,
+            id: zhida[0].id,
+            // name: zhida.singername,
+            name: zhida[0].title,
+            // pic: `https://y.gtimg.cn/music/photo_new/T001R800x800M000${zhida.singermid}.jpg?max_age=2592000`,
+            // pic: zhida[0].pic,
+            pic: `https://y.gtimg.cn/music/photo_new/T001R800x800M000${mid}.jpg?max_age=2592000`,
+            // mid: zhida.singermid,
+            mid: mid,
           }
         }
 
-        const { curnum, curpage, totalnum } = songData
-        const hasMore = 20 * (curpage - 1) + curnum < totalnum
+        // !!! 接口被做处理，web端搜索接口默认为10条
+        // !!! 改为桌面端
+        // const { curnum, curpage, totalnum } = songData
+        const { ein, curpage, sum } = data.meta
+        const hasMore = songList.length !== 0 || 20 * (curpage - 1) + ein < sum
 
         res.end(
           JSON.stringify({
@@ -775,7 +862,7 @@ function registerSearch(app) {
 }
 
 const apiPlugin = () => ({
-  name: 'apiPlugin',
+  name: 'api-plugin',
   configureServer(server) {
     // 返回一个在内部中间件安装后
     // 被调用的后置钩子
