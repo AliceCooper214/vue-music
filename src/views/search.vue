@@ -15,20 +15,44 @@
             </li>
           </ul>
         </div>
+        <div class="search-history" v-show="searchHistory.length">
+          <h1 class="title">
+            <span class="text">搜索历史</span>
+            <span class="clear" @click="showConfirm">
+              <i class="icon-clear"></i>
+            </span>
+          </h1>
+          <search-list
+            :searches="searchHistory"
+            @select="addQuery"
+            @delete="deleteSearch"
+          ></search-list>
+        </div>
       </div>
     </scroll>
     <div class="search-result" v-show="query">
-      <suggest :query="query"></suggest>
+      <suggest :query="query" @select-song="selectSong" @select-singer="selectSinger"></suggest>
     </div>
+    <router-view v-slot="{ Component }">
+      <transition appear name="slide">
+        <component :is="Component" :data="selectedSinger" />
+      </transition>
+    </router-view>
   </div>
 </template>
 
 <script>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { getHotKeys } from '@/service/search'
 import SearchInput from '@/components/search/search-input'
 import Suggest from '@/components/search/suggest'
 import Scroll from '@/components/base/scroll/scroll'
+import SearchList from '@/components/base/search-list/search-list'
+import storage from 'good-storage'
+import { SINGER_KEY } from '@/assets/js/constant'
+import useSearchHistory from '@/components/search/use-search-history'
 
 export default {
   name: 'search',
@@ -36,11 +60,20 @@ export default {
     SearchInput,
     Suggest,
     Scroll,
+    SearchList,
   },
   setup() {
     const query = ref('')
     const hotKeys = ref([])
     const scrollRef = ref(null)
+    const selectedSinger = ref(null)
+
+    const store = useStore()
+    const searchHistory = computed(() => store.state.searchHistory)
+
+    const router = useRouter()
+
+    const { saveSearch, deleteSearch, clearSearch } = useSearchHistory()
 
     getHotKeys().then(result => {
       hotKeys.value = result.hotKeys
@@ -56,11 +89,40 @@ export default {
       query.value = s
     }
 
+    function selectSong(song) {
+      saveSearch(query.value)
+      store.dispatch('addSong', song)
+    }
+
+    function selectSinger(singer) {
+      saveSearch(query.value)
+      selectedSinger.value = singer
+      cacheSinger(singer)
+
+      router.push({
+        path: `/search/${singer.mid}`,
+      })
+    }
+
+    function cacheSinger(singer) {
+      storage.session.set(SINGER_KEY, singer)
+    }
+
+    function showConfirm() {}
+
     return {
       query,
       hotKeys,
       scrollRef,
       addQuery,
+      selectSong,
+      selectSinger,
+      selectedSinger,
+      searchHistory,
+      deleteSearch,
+      clearSearch,
+      saveSearch,
+      showConfirm,
     }
   },
 }
@@ -95,6 +157,27 @@ export default {
         background: $color-highlight-background;
         font-size: $font-size-medium;
         color: $color-text-d;
+      }
+    }
+    .search-history {
+      position: relative;
+      margin: 0 20px;
+      .title {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        font-size: $font-size-medium;
+        color: $color-text-l;
+        .text {
+          flex: 1;
+        }
+        .clear {
+          @include extend-click();
+          .icon-clear {
+            font-size: $font-size-medium;
+            color: $color-text-d;
+          }
+        }
       }
     }
   }

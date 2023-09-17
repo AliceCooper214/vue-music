@@ -47,6 +47,12 @@ const routes = [
   {
     path: '/search',
     component: Search,
+    children: [
+      {
+        path: ':id',
+        component: SingerDetail
+      }
+    ]
   },
   {
     path: '/user',
