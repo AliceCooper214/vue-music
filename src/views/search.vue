@@ -22,6 +22,12 @@
               <i class="icon-clear"></i>
             </span>
           </h1>
+          <confirm
+            ref="confirmRef"
+            text="是否清空所有搜索历史"
+            confirm-btn-text="清空"
+            @confirm="clearSearch"
+          />
           <search-list
             :searches="searchHistory"
             @select="addQuery"
@@ -42,89 +48,78 @@
 </template>
 
 <script>
-import { ref, watch, nextTick, computed } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { getHotKeys } from '@/service/search'
+export default {
+  name: 'search',
+}
+</script>
+
+<script setup>
 import SearchInput from '@/components/search/search-input'
 import Suggest from '@/components/search/suggest'
-import Scroll from '@/components/base/scroll/scroll'
 import SearchList from '@/components/base/search-list/search-list'
+import Scroll from '@/components/wrap-scroll'
+import Confirm from '@/components/base/confirm/confirm'
+import { ref, computed, watch, nextTick } from 'vue'
+import { getHotKeys } from '@/service/search'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import storage from 'good-storage'
 import { SINGER_KEY } from '@/assets/js/constant'
 import useSearchHistory from '@/components/search/use-search-history'
 
-export default {
-  name: 'search',
-  components: {
-    SearchInput,
-    Suggest,
-    Scroll,
-    SearchList,
-  },
-  setup() {
-    const query = ref('')
-    const hotKeys = ref([])
-    const scrollRef = ref(null)
-    const selectedSinger = ref(null)
+const query = ref('')
+const hotKeys = ref([])
+const scrollRef = ref(null)
+const selectedSinger = ref(null)
+const confirmRef = ref(null)
 
-    const store = useStore()
-    const searchHistory = computed(() => store.state.searchHistory)
+const store = useStore()
+const searchHistory = computed(() => store.state.searchHistory)
 
-    const router = useRouter()
+const router = useRouter()
 
-    const { saveSearch, deleteSearch, clearSearch } = useSearchHistory()
+const { saveSearch, deleteSearch, clearSearch } = useSearchHistory()
 
-    getHotKeys().then(result => {
-      hotKeys.value = result.hotKeys
-    })
+getHotKeys().then(result => {
+  hotKeys.value = result.hotKeys
+})
 
-    watch(query, async newQuery => {
-      if (!newQuery) {
-        await nextTick()
-      }
-    })
+function refreshScroll() {
+  scrollRef.value.scroll.refresh()
+}
 
-    function addQuery(s) {
-      query.value = s
-    }
+watch(query, async newQuery => {
+  if (!newQuery) {
+    await nextTick()
+    refreshScroll()
+  }
+})
 
-    function selectSong(song) {
-      saveSearch(query.value)
-      store.dispatch('addSong', song)
-    }
+function addQuery(s) {
+  query.value = s
+}
 
-    function selectSinger(singer) {
-      saveSearch(query.value)
-      selectedSinger.value = singer
-      cacheSinger(singer)
+function selectSong(song) {
+  saveSearch(query.value)
+  store.dispatch('addSong', song)
+}
 
-      router.push({
-        path: `/search/${singer.mid}`,
-      })
-    }
+function selectSinger(singer) {
+  saveSearch(query.value)
+  selectedSinger.value = singer
+  cacheSinger(singer)
 
-    function cacheSinger(singer) {
-      storage.session.set(SINGER_KEY, singer)
-    }
+  router.push({
+    path: `/search/${singer.mid}`,
+  })
+}
 
-    function showConfirm() {}
+function cacheSinger(singer) {
+  storage.session.set(SINGER_KEY, singer)
+}
 
-    return {
-      query,
-      hotKeys,
-      scrollRef,
-      addQuery,
-      selectSong,
-      selectSinger,
-      selectedSinger,
-      searchHistory,
-      deleteSearch,
-      clearSearch,
-      saveSearch,
-      showConfirm,
-    }
-  },
+function showConfirm() {
+  confirmRef.value.show()
 }
 </script>
 

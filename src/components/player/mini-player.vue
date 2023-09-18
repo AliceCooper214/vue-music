@@ -67,7 +67,7 @@ export default {
     }
 
     function showPlaylist() {
-      // playlistRef.value.show()
+      playlistRef.value.show()
     }
 
     return {

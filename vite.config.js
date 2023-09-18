@@ -3,7 +3,7 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import Inspect from 'vite-plugin-inspect'
-import apiPlugin from './plugins/registerRouter'
+import apiPlugin from './plugins/router'
 
 // https://vitejs.dev/config/
 export default defineConfig({

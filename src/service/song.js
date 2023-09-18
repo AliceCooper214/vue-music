@@ -1,30 +1,29 @@
 import { get } from './base'
 
-export function processSongs(songs) {
+export async function processSongs(songs) {
   if (!songs.length) {
     return Promise.resolve(songs)
   }
 
-  return get('/api/getSongsUrl', {
+  const result = await get('/api/getSongsUrl', {
     mid: songs.map(song => {
       return song.mid
     }),
-  }).then(result => {
-    const map = result.map
-    return songs
-      .map(song => {
-        song.url = map[song.mid]
-        return song
-      })
-      .filter(song => {
-        return song.url && song.url.indexOf('vkey') > -1
-      })
   })
+  const map = result.map
+  return songs
+    .map(song_1 => {
+      song_1.url = map[song_1.mid]
+      return song_1
+    })
+    .filter(song_2 => {
+      return song_2.url && song_2.url.indexOf('vkey') > -1
+    })
 }
 
 const lyricMap = {}
 
-export function getLyric(song) {
+export async function getLyric(song) {
   if (song.lyric) {
     return Promise.resolve(song.lyric)
   }
@@ -34,11 +33,10 @@ export function getLyric(song) {
     return Promise.resolve(lyric)
   }
 
-  return get('/api/getLyric', {
+  const result = await get('/api/getLyric', {
     mid,
-  }).then(result => {
-    const lyric = result ? result.lyric : '[00:00:00]该歌曲暂时无法获取歌词'
-    lyricMap[mid] = lyric
-    return lyric
   })
+  const lyric_1 = result ? result.lyric : '[00:00:00]该歌曲暂时无法获取歌词'
+  lyricMap[mid] = lyric_1
+  return lyric_1
 }
