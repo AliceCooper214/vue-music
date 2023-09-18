@@ -5,7 +5,7 @@
 - 相较于之前用vue-cli创建项目，通过beforeServer，载入路由。现在可以用于vite。
 
 差异点：
-vue-cli服务是用的express，而vite用的是connect，同时该库不支持内置qs，所以要使用nodejs自带的querystring
+vue-cli服务是用的express，而vite用的是connect，同时该库不支持内置qs，所以要使用node.js自带的querystring
 vite的插件调试，在开发环境相对困难一些。
 
 - 修复了搜索接口的使用
